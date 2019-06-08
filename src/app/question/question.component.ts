@@ -6,6 +6,7 @@ import {QuestionService} from '../service/question.service';
 import {AppComponent} from '../app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserModule} from '@angular/platform-browser';
+import {StatusService} from '../service/status.service';
 
 @Component({
   selector: 'app-question',
@@ -29,7 +30,8 @@ export class QuestionComponent implements OnInit {
     private activeRouter: ActivatedRoute,
     private questionService: QuestionService,
     private fb: FormBuilder,
-    private router: Router) {
+    private router: Router,
+    private statusService: StatusService) {
   }
 
   ngOnInit() {
@@ -62,6 +64,7 @@ export class QuestionComponent implements OnInit {
         console.log('Cai minh chon' + this.formQuestion.value.answer);
         console.log('ket qua' + this.question.answer.id);
     */
+
     console.log(this.listAnswer);
 
 
@@ -92,6 +95,9 @@ export class QuestionComponent implements OnInit {
 
   getData() {
     this.question = this.listQuestion[this.count - 1];
+    this.flagSvenData = true;
+    this.sendData.emit(this.flagSvenData);
+    this.statusService.changeStatus(this.flagSvenData);
 
   }
 }

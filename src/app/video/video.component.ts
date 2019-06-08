@@ -1,27 +1,46 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {StatusService} from '../service/status.service';
 
 @Component({
   selector: 'app-video',
   templateUrl: './video.component.html',
   styleUrls: ['./video.component.scss']
 })
-export class VideoComponent implements OnInit {
+export class VideoComponent implements OnChanges {
 
   @Input()
-  dataQuestion: boolean;
-  @ViewChild('videoPlayer') videoPlayer: ElementRef;
-  check = true;
+  dataQuestion = false;
 
-  constructor() {
+  status: boolean;
+
+
+  @Output() take = new EventEmitter<boolean>();
+  /* @Output() talk: EventEmitter<boolean> = new EventEmitter<boolean>();*/
+
+  @ViewChild('videoPlayer') videoPlayer: ElementRef;
+
+
+  constructor(private statusService: StatusService) {
+    console.log('1');
+
+
   }
+
 
   ngOnInit() {
-    this.reload();
+    this.statusService.currentStatus.subscribe(status => this.status = status);
+    if (!this.dataQuestion) {
+      this.playPause();
+      this.dataQuestion = false;
+      this.statusService.changeStatus(this.dataQuestion);
+    }
   }
 
-  play() {
+  playVideo() {
     if (this.dataQuestion === true) {
       this.playPause();
+      this.dataQuestion = false;
+      this.statusService.changeStatus(this.dataQuestion);
     }
   }
 
@@ -30,17 +49,34 @@ export class VideoComponent implements OnInit {
   }
 
   playPause() {
-    if (this.check) {
-      this.videoPlayer.nativeElement.play();
-      setTimeout(() => {
-        this.pause();
-      }, 3000);
-    }
-    this.dataQuestion = false;
+    this.videoPlayer.nativeElement.play();
+    setTimeout(() => {
+      this.pause();
+    }, 3000);
   }
 
   pause() {
     this.videoPlayer.nativeElement.pause();
+  }
+
+  VideoComponent() {
+    this.playVideo();
+    {
+      if (this.dataQuestion === true) {
+        this.playPause();
+        this.dataQuestion = false;
+        this.statusService.changeStatus(this.dataQuestion);
+      }
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log(changes);
+    const changeData = changes['dataQuestion'];
+    if (changeData.currentValue ===true){
+      console.log("play video");
+      this.playPause();
+    } else console.log("No play");
   }
 
 }
