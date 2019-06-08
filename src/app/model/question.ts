@@ -1,6 +1,6 @@
 export interface IQuestion {
   id: number;
-  contain: string;
+  content: string;
   result: string;
   answer: IAnswer;
 }
