@@ -21,6 +21,7 @@ export class QuestionComponent implements OnInit {
   question: IQuestion;
   count = 1;
   flagSvenData = false;
+  dapAn: string[] = new Array('A)', 'B)', 'C)', 'D)');
 
   @Output() sendData = new EventEmitter<boolean>();
 
