@@ -15,7 +15,7 @@ export class QuestionService {
   }
 
   getListQuestion(): Promise<IQuestion> {
-    return this.http.get<IQuestion>('https://6dc1f247-0404-4cfd-8243-7b8413474a14.mock.pstmn.io/test').toPromise();
+    return this.http.get<IQuestion>('http://localhost:8080/api/questions/').toPromise();
   }
 
   getQuestionBuyId(id: number): Observable<IQuestion> {
