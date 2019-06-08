@@ -1,10 +1,47 @@
 <div>
   <div>
     <h2>Cau hoi: </h2>
-    <h4>Content: </h4>
+    <h4>Content:
+      {{listQuestion.content.toLowerCase()}}
+    </h4>
   </div>
 
   <div>
+    <!-- Form starts -->
+    <form [formGroup]="formQuestion" (ngSubmit)="onSubmit()">
+      <!-- Gender -->
+      <div>
+        <label class="custom-control-label" for="dap-an-A">A)</label>
+        <input id="dap-an-A" type="radio" class="custom-control-input" value="A" name="answer"
+               formControlName="answer">
 
+      </div>
+      <div>
+        <label class="custom-control-label" for="dap-an-B">B)</label>
+        <input id="dap-an-B" type="radio" class="custom-control-input" value="B" name="answer"
+               formControlName="answer">
+
+      </div>
+
+      <div>
+
+        <label class="custom-control-label" for="dap-an-C">C)</label>
+        <input id="dap-an-C" type="radio" class="custom-control-input" value="C" name="answer"
+               formControlName="answer">
+
+
+      </div>
+      <div>
+        <label class="custom-control-label" for="dap-an-D">D)</label>
+        <input id="dap-an-D" type="radio" class="custom-control-input" value="D" name="answer"
+               formControlName="answer">
+
+      </div>
+      <div *ngIf="isSubmitted && myForm.invalid">
+        <p>Please select either value</p>
+      </div>
+      <!-- Submit Button -->
+      <button type="submit">Submit</button>
+    </form>
   </div>
 </div>
