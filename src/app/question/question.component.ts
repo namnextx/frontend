@@ -1,5 +1,5 @@
-import {Component, NgModule, OnInit} from '@angular/core';
-import {IQuestion} from '../model/question';
+import {Component, EventEmitter, NgModule, OnInit, Output} from '@angular/core';
+import {IAnswer, IQuestion} from '../model/question';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {QuestionService} from '../service/question.service';
@@ -13,10 +13,16 @@ import {BrowserModule} from '@angular/platform-browser';
   styleUrls: ['./question.component.scss']
 })
 
+
 export class QuestionComponent implements OnInit {
   listQuestion: IQuestion;
+  listAnswer: IAnswer;
   formQuestion: FormGroup;
-  answer: string;
+  question: IQuestion;
+  count = 1;
+  flagSvenData = false;
+
+  @Output() sendData = new EventEmitter<boolean>();
 
   constructor(
     private activeRouter: ActivatedRoute,
@@ -27,17 +33,64 @@ export class QuestionComponent implements OnInit {
 
   ngOnInit() {
 
+    this.questionService.getListQuestion().then(list =>
+      this.listQuestion = list
+    );
+
+
     this.formQuestion = this.fb.group(
       {
         answer: ''
       }
     );
 
-    this.questionService.getListQuestion().then(list =>
-      this.listQuestion = list);
+    this.questionService.getAnswerBuyId(1).subscribe(data => {
+        this.listAnswer = data;
+      },
+      error => {
+        console.log(error);
+        this.listAnswer = null;
+      });
   }
 
   onSubmit() {
-    alert(JSON.stringify(this.formQuestion.value));
+    /*
+
+        console.log(this.count);
+        console.log(this.listQuestion[this.count - 1]);
+        console.log('Cai minh chon' + this.formQuestion.value.answer);
+        console.log('ket qua' + this.question.answer.id);
+    */
+    console.log(this.listAnswer);
+
+
+    if (this.formQuestion.value.answer == this.question.answer.id) {
+      this.question = this.listQuestion[this.count];
+      this.questionService.getAnswerBuyId(this.question.answer.id).subscribe(data => {
+          this.listAnswer = data;
+        },
+        error => {
+          console.log(error);
+          this.listAnswer = null;
+        });
+      this.flagSvenData = true;
+      this.sendData.emit(this.flagSvenData);
+
+      console.log('Dap an dung');
+      this.count++;
+
+
+    } else {
+      this.flagSvenData = false;
+      this.sendData.emit(this.flagSvenData);
+      this.count = 1;
+      this.question = this.listQuestion[this.count - 1];
+      this.ngOnInit();
+    }
+  }
+
+  getData() {
+    this.question = this.listQuestion[this.count - 1];
+
   }
 }

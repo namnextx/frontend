@@ -1,45 +1,20 @@
 <div>
+  <button (click)="getData()">Start</button>
   <div>
-    <h2>Cau hoi: </h2>
-    <h4>Content:
-      {{listQuestion.content.toLowerCase()}}
-    </h4>
+    <h2 *ngIf="question">Cau hoi: {{question.content}} </h2>
   </div>
 
-  <div>
+  <div *ngIf="listAnswer">
     <!-- Form starts -->
-    <form [formGroup]="formQuestion" (ngSubmit)="onSubmit()">
-      <!-- Gender -->
-      <div>
-        <label class="custom-control-label" for="dap-an-A">A)</label>
-        <input id="dap-an-A" type="radio" class="custom-control-input" value="A" name="answer"
-               formControlName="answer">
-
-      </div>
-      <div>
-        <label class="custom-control-label" for="dap-an-B">B)</label>
-        <input id="dap-an-B" type="radio" class="custom-control-input" value="B" name="answer"
-               formControlName="answer">
-
-      </div>
-
-      <div>
-
-        <label class="custom-control-label" for="dap-an-C">C)</label>
-        <input id="dap-an-C" type="radio" class="custom-control-input" value="C" name="answer"
-               formControlName="answer">
-
-
-      </div>
-      <div>
-        <label class="custom-control-label" for="dap-an-D">D)</label>
-        <input id="dap-an-D" type="radio" class="custom-control-input" value="D" name="answer"
-               formControlName="answer">
-
-      </div>
-      <div *ngIf="isSubmitted && myForm.invalid">
-        <p>Please select either value</p>
-      </div>
+    <form [formGroup]="formQuestion" (ngSubmit)="onSubmit()" *ngIf="question && listAnswer">
+      <table>
+        <tr *ngFor="let awesome of listAnswer">
+          <td>
+            <label for="dap-an-A">{{awesome.result}}</label>
+            <input id="dap-an-A" type="radio" class="custom-control-input" value="{{awesome.id}}" name="answer" formControlName="answer">
+          </td>
+        </tr>
+      </table>
       <!-- Submit Button -->
       <button type="submit">Submit</button>
     </form>

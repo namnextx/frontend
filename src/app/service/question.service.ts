@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {IQuestion} from '../model/question';
+import {IAnswer, IQuestion} from '../model/question';
 import {map} from 'rxjs/operators';
 
 @Injectable({
@@ -18,8 +18,8 @@ export class QuestionService {
     return this.http.get<IQuestion>('http://localhost:8080/api/questions/').toPromise();
   }
 
-  getQuestionBuyId(id: number): Observable<IQuestion> {
-    return this.http.get<IQuestion>(`${this.API_URL}/question/${id}`);
+  getAnswerBuyId(id: number): Observable<IAnswer> {
+    return this.http.get<IAnswer>(`${this.API_URL}/answers/${id}`);
   }
 
   createQuestion(post: Partial<IQuestion>): Observable<IQuestion> {
@@ -27,7 +27,7 @@ export class QuestionService {
   }
 
   deleteQuestion(id: number): Observable<any> {
-    return this.http.delete(`${this.API_URL}/${id}`);
+    return this.http.delete(`${this.API_URL}/${id}/`);
   }
 
   updateQuestion(post: IQuestion): Observable<IQuestion> {
