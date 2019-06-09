@@ -26,16 +26,6 @@ export class VideoComponent implements OnChanges {
 
   }
 
-
-  ngOnInit() {
-    this.statusService.currentStatus.subscribe(status => this.status = status);
-    if (!this.dataQuestion) {
-      this.playPause();
-      this.dataQuestion = false;
-      this.statusService.changeStatus(this.dataQuestion);
-    }
-  }
-
   playVideo() {
     if (this.dataQuestion === true) {
       this.playPause();
